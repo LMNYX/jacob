@@ -71,16 +71,19 @@ async def on_ready():
 async def WikiThredia():
 	global CHANNEL
 	global FOOTBALL_CHANNEL
-	if CHANNEL == None:
-		return # Wait until ready
+	try:
+		if CHANNEL == None:
+			return # Wait until ready
 
-	_data = GeneratePages(1)[0]
-	_url = f"""https://en.wikipedia.org/wiki/{urllib.parse.quote(f"{_data['title']}")}"""
-	embed=discord.Embed(title=_data['title'], description=_data['shortdesc'], color=0x7592e8)
-	embed.set_footer(text="Wikipedia Random Page")
-	if("football" in _data['shortdesc']):
-		await FOOTBALL_CHANNEL.send(f"<{_url}>", embed=embed)
-	else:
-		await CHANNEL.send(f"<{_url}>", embed=embed)
+		_data = GeneratePages(1)[0]
+		_url = f"""https://en.wikipedia.org/wiki/{urllib.parse.quote(f"{_data['title']}")}"""
+		embed=discord.Embed(title=_data['title'], description=_data['shortdesc'], color=0x7592e8)
+		embed.set_footer(text="Wikipedia Random Page")
+		if("football" in _data['shortdesc']):
+			await FOOTBALL_CHANNEL.send(f"<{_url}>", embed=embed)
+		else:
+			await CHANNEL.send(f"<{_url}>", embed=embed)
+	except Exception as e:
+		await WikiThredia()
 
 client.run(DISCORD_TOKEN)
